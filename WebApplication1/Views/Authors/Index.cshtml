@@ -1,0 +1,112 @@
+﻿@model IEnumerable<WebApplication1.Models.Author>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Authors</h1>
+
+<p>
+    <a asp-action="Create" class="insert">Insert</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            @if (User.IsInRole("Admin") || User.IsInRole("User"))
+            {
+                <td>
+                    <a asp-action="Edit" class="edit" asp-route-id="@item.AuthorId">Edit</a> |
+                    <a asp-action="Details" class="details" asp-route-id="@item.AuthorId">Details</a> |
+                    <a asp-action="Delete" class="delete" asp-route-id="@item.AuthorId">Delete</a>
+                </td>
+            }
+            </tr>
+
+}
+    </tbody>
+</table>
+
+<style>
+     body {
+         color: #FFFAFA;
+     }
+
+     h1 {
+         color: #BC8F8F;
+         font-size: 40px;
+         text-transform: uppercase;
+     }
+
+     .insert {
+         color: #BC8F8F;
+         font-size: 20px;
+         text-transform: uppercase;
+     }
+
+     .table {
+         font-family: Arial, Helvetica, sans-serif;
+         border-collapse: collapse;
+         width: 100%;
+     }
+
+         .table th {
+             padding-top: 12px;
+             padding-bottom: 12px;
+             text-align: left;
+             background-color: #BC8F8F;
+             color: white;
+         }
+
+         .table td, .table th {
+             border: 1px solid #ddd;
+             padding: 8px;
+         }
+     /*.table tr:nth-child(even) {
+         background-color: #f2f2f2;
+     }
+
+    .table tr:hover {
+         background-color: #ddd;
+     }*/
+     .delete {
+         font-family: Arial, Helvetica, sans-serif;
+         font-weight: bold;
+         color: white;
+         border: 1px solid #ddd;
+         background-color: #BC8F8F;
+         font-size: 15px;
+         border-radius: 5px;
+     }
+
+     .edit {
+         font-family: Arial, Helvetica, sans-serif;
+         font-weight: bold;
+         color: white;
+         border: 1px solid #ddd;
+         background-color: #BC8F8F;
+         font-size: 15px;
+         border-radius: 5px;
+     }
+
+     .details {
+         font-family: Arial, Helvetica, sans-serif;
+         font-weight: bold;
+         color: white;
+         border: 1px solid #ddd;
+         background-color: #BC8F8F;
+         font-size: 15px;
+         border-radius: 5px;
+     }
+</style>

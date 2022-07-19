@@ -1,0 +1,148 @@
+﻿@model IEnumerable<WebApplication1.Models.Book>
+@using X.PagedList.Mvc.Core; <!--import to get HTML Helper-->
+@using X.PagedList;
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Books</h1>
+
+<p>
+    <a asp-action="Create" class="insert">Insert</a>
+</p>
+<!-- paging control for navigation to the previous page, next page, etc -->
+ 
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+    new X.PagedList.Mvc.Common.PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = true,
+        ContainerDivClasses = new[] { "navigation" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+    })
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Borrower)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Borrower.Name)
+                </td>
+                @if (User.IsInRole("Administrator") || User.IsInRole("User"))
+                {
+                    <td>
+                        <a asp-action="Edit" class="edit" asp-route-id="@item.BookId">Edit</a> |
+                        <a asp-action="Details" class="details" asp-route-id="@item.BookId">Details</a> |
+                        <a asp-action="Delete" class="delete" asp-route-id="@item.BookId">Delete</a>
+
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    body {
+        color: #FFFAFA;
+    }
+
+    h1 {
+        color: #BC8F8F;
+        font-size: 40px;
+        text-transform: uppercase;
+    }
+
+    .insert {
+        color: #BC8F8F;
+        font-size: 20px;
+        text-transform: uppercase;
+    }
+
+    .table {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+        .table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #BC8F8F;
+            color: white;
+        }
+
+        .table td, .table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    /*.table tr:nth-child(even) {
+         background-color: #f2f2f2;
+     }
+
+    .table tr:hover {
+         background-color: #ddd;
+     }*/
+    .delete {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        color: white;
+        border: 1px solid #ddd;
+        background-color: #BC8F8F;
+        font-size: 15px;
+        border-radius: 5px;
+    }
+
+    .edit {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        color: white;
+        border: 1px solid #ddd;
+        background-color: #BC8F8F;
+        font-size: 15px;
+        border-radius: 5px;
+    }
+
+    .details {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        color: white;
+        border: 1px solid #ddd;
+        background-color: #BC8F8F;
+        font-size: 15px;
+        border-radius: 5px;
+    }
+</style>
+@section Scripts{
+    <script>
+        // Workaround to fix style of text for showing items .. through ..
+        // Problem related to Boostrap 4 according to issue in link below
+        // https://github.com/dncuug/X.PagedList/issues/127
+        $(document).ready(function () {
+            $('ul.pagination > li.disabled > a').addClass('page-link');
+        });
+    </script>
+}
